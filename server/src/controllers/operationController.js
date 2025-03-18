@@ -1,5 +1,6 @@
 const Operation = require('../models/Operation');
-const Diagram = require('../models/Diagram');
+const path = require('path');
+const Diagram = require(path.join(__dirname, '../models/Diagram'));
 const ValidationEngine = require('../services/validationEngine');
 const XLSX = require('xlsx');
 
