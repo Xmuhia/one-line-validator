@@ -3,7 +3,7 @@
     import { browser } from '$app/environment';
     import { onMount } from 'svelte';
     import { createOperation } from '../services/api';
-    import { Dropzone } from 'svelte-file-dropzone';
+    import Dropzone from 'svelte-file-dropzone';
     
     const dispatch = createEventDispatcher();
     
