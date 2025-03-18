@@ -36,6 +36,12 @@ const fs = require('fs');
 if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
 }
+if (!fs.existsSync('uploads/diagrams')) {
+  fs.mkdirSync('uploads/diagrams');
+}
+if (!fs.existsSync('uploads/operations')) {
+  fs.mkdirSync('uploads/operations');
+}
 
 // Make uploads directory accessible
 app.use('/uploads', express.static('uploads'));
