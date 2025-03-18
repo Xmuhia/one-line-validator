@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { Dropzone } from 'svelte-file-dropzone';
+    import { browser } from '$app/environment';
+    import { onMount } from 'svelte';
     import { uploadDiagram } from '../services/api';
     
     const dispatch = createEventDispatcher();
@@ -9,6 +10,17 @@
     let uploading = false;
     let error = null;
     let diagramName = '';
+    let Dropzone;
+    let dropzoneLoaded = false;
+    
+    onMount(async () => {
+      if (browser) {
+        // Import Dropzone only on client-side
+        const module = await import('svelte-file-dropzone');
+        Dropzone = module.Dropzone;
+        dropzoneLoaded = true;
+      }
+    });
     
     function handleFilesSelect(e) {
       const { acceptedFiles } = e.detail;
@@ -73,12 +85,19 @@
     </div>
     
     <div class="form-group">
-      <Dropzone on:drop={handleFilesSelect} accept=".png,.jpg,.jpeg,.pdf">
+      {#if browser && dropzoneLoaded && Dropzone}
+        <svelte:component this={Dropzone} on:drop={handleFilesSelect} accept=".png,.jpg,.jpeg,.pdf">
+          <div class="dropzone-content">
+            <p>Drag & drop your one-line diagram here</p>
+            <p class="small">Supported formats: PNG, JPG, PDF</p>
+          </div>
+        </svelte:component>
+      {:else}
         <div class="dropzone-content">
-          <p>Drag & drop your one-line diagram here</p>
+          <p>Loading file upload component...</p>
           <p class="small">Supported formats: PNG, JPG, PDF</p>
         </div>
-      </Dropzone>
+      {/if}
     </div>
     
     {#if files.length > 0}
