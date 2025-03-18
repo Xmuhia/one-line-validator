@@ -27,3 +27,43 @@
     </footer>
   </div>
 </Router>
+<style>
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    main {
+      flex-grow: 1;
+      padding: 2rem 0;
+    }
+    
+    footer {
+      border-top: 1px solid #ccc;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    
+    nav a {
+      margin-left: 1rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    
+    nav a:hover {
+      color: #0066cc;
+    }
+  </style>
