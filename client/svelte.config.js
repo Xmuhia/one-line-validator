@@ -1,10 +1,15 @@
+import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
-	kit: {
-	  // Disable SvelteKit's built-in routing as we're using svelte-routing
-	  router: false,
-	  // Disable SvelteKit's built-in hydration as we're using our own
-	  hydrate: false
-	}
-  };
-  
-  export default config;
+  preprocess: vitePreprocess(),
+  kit: {
+    router: {
+      type: "pathname"
+    },
+    adapter: adapter()
+  }
+};
+
+export default config;
