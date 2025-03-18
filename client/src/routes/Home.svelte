@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
     import DiagramUploader from '../components/DiagramUploader.svelte';
+    import OperationUploader from '../components/OperationUploader.svelte';
     import { diagramStore } from '../stores/diagramStore';
     import { operationStore } from '../stores/operationStore';
     
@@ -13,6 +14,9 @@
     $: operations = $operationStore.operations;
     $: operationsLoading = $operationStore.loading;
     $: operationError = $operationStore.error;
+    
+    // Selected diagram for operation uploads
+    let selectedDiagramId = null;
     
     onMount(() => {
       // Load data on component mount
@@ -26,6 +30,16 @@
       navigate(`/diagrams/${diagram._id}`);
     }
     
+    function handleOperationUploaded(event) {
+      const operation = event.detail;
+      operationStore.addOperation(operation);
+      navigate(`/operations/${operation._id}`);
+    }
+    
+    function selectDiagramForOperation(diagramId) {
+      selectedDiagramId = diagramId;
+    }
+    
     function formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
@@ -33,9 +47,21 @@
   </script>
   
   <div class="home-container">
-    <section class="uploader-section">
-      <DiagramUploader on:diagramUploaded={handleDiagramUploaded} />
-    </section>
+    <div class="uploaders-container">
+      <section class="uploader-section">
+        <DiagramUploader on:diagramUploaded={handleDiagramUploaded} />
+      </section>
+      
+      <section class="uploader-section">
+        <OperationUploader 
+          diagramId={selectedDiagramId} 
+          on:operationUploaded={handleOperationUploaded} 
+        />
+        {#if !selectedDiagramId}
+          <div class="info-message">Please select a diagram below to upload operations for.</div>
+        {/if}
+      </section>
+    </div>
     
     <section class="existing-diagrams">
       <h2>Existing Diagrams</h2>
@@ -49,15 +75,23 @@
       {:else}
         <div class="diagrams-list">
           {#each diagrams as diagram}
-            <div class="diagram-card">
+            <div class="diagram-card {selectedDiagramId === diagram._id ? 'selected' : ''}">
               <h3>{diagram.name}</h3>
               <p class="date">Uploaded: {formatDate(diagram.uploadDate)}</p>
-              <button 
-                class="view-btn"
-                on:click={() => navigate(`/diagrams/${diagram._id}`)}
-              >
-                View Diagram
-              </button>
+              <div class="button-group">
+                <button 
+                  class="view-btn"
+                  on:click={() => navigate(`/diagrams/${diagram._id}`)}
+                >
+                  View Diagram
+                </button>
+                <button 
+                  class="select-btn {selectedDiagramId === diagram._id ? 'selected' : ''}"
+                  on:click={() => selectDiagramForOperation(diagram._id)}
+                >
+                  {selectedDiagramId === diagram._id ? 'Selected' : 'Select for Operation'}
+                </button>
+              </div>
             </div>
           {/each}
         </div>
@@ -100,6 +134,25 @@
       max-width: 100%;
     }
     
+    .uploaders-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .uploaders-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .uploader-section {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    
     section {
       margin-bottom: 2rem;
     }
@@ -119,10 +172,21 @@
       position: relative;
     }
     
+    .diagram-card.selected {
+      border: 2px solid #0066cc;
+      box-shadow: 0 3px 8px rgba(0, 102, 204, 0.2);
+    }
+    
     .date {
       color: #666;
       font-size: 0.9rem;
       margin-bottom: 1rem;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
     
     .view-btn {
@@ -133,6 +197,20 @@
       border-radius: 4px;
       cursor: pointer;
       font-weight: bold;
+    }
+    
+    .select-btn {
+      background: #666;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .select-btn.selected {
+      background: #28a745;
     }
     
     .status-badge {
@@ -161,5 +239,14 @@
       padding: 0.75rem;
       border-radius: 4px;
       margin-bottom: 1rem;
+    }
+    
+    .info-message {
+      background: #e7f3ff;
+      color: #0066cc;
+      padding: 0.75rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
     }
   </style>
