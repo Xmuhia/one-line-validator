@@ -1,5 +1,6 @@
 const DiagramParser = require('../services/diagramParser');
-const Diagram = require('../models/Diagram');
+const path = require('path');
+const Diagram = require(path.join(__dirname, '../models/Diagram'));
 
 // Upload and parse diagram
 exports.uploadDiagram = async (req, res) => {
