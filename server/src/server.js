@@ -40,6 +40,11 @@ if (!fs.existsSync('uploads')) {
 // Make uploads directory accessible
 app.use('/uploads', express.static('uploads'));
 
+// Root route handler
+app.get('/', (req, res) => {
+  res.send('One-Line Diagram Validator API is running');
+});
+
 // Routes
 app.use('/api', apiRoutes);
 
