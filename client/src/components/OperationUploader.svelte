@@ -45,6 +45,7 @@
       
       try {
         const formData = new FormData();
+        // Ensure field name matches what the server expects
         formData.append('operation', files[0]);
         formData.append('name', operationName);
         formData.append('diagramId', diagramId);
@@ -58,7 +59,13 @@
         // Notify parent component
         dispatch('operationUploaded', response.operation);
       } catch (err) {
+        console.error('Upload error details:', err);
         error = err.message || 'Error uploading operation sequence';
+        if (err.response) {
+          // If we have a response object, log more details
+          console.error('Server response:', err.response.status, err.response.data);
+          error = err.response.data?.message || error;
+        }
       } finally {
         uploading = false;
       }
