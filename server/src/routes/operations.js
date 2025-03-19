@@ -39,7 +39,7 @@ const upload = multer({
 });
 
 // Routes
-router.post('/', upload.single('operation'), operationController.uploadOperation);
+router.post('/', upload.single('operation'), operationController.createOperation);
 router.get('/', operationController.getOperations);
 router.get('/diagram/:diagramId', operationController.getOperationsByDiagram);
 router.get('/:id', operationController.getOperation);
