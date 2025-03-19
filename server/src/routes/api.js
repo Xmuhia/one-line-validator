@@ -34,7 +34,7 @@ router.get('/diagrams/:id', diagramController.getDiagramById);
 router.delete('/diagrams/:id', diagramController.deleteDiagram);
 
 // Operation routes
-router.post('/operations', uploadOperation.single('operationFile'), operationController.createOperation);
+router.post('/operations', uploadOperation.single('operation'), operationController.createOperation);
 router.get('/operations', operationController.getAllOperations);
 router.get('/operations/:id', operationController.getOperationById);
 router.delete('/operations/:id', operationController.deleteOperation);
