@@ -44,11 +44,22 @@
       uploading = true;
       
       try {
+        // Create a new FormData object
         const formData = new FormData();
-        // Ensure field name matches what the server expects
+        
+        // Log the file object to make sure it's valid
+        console.log('File object:', files[0]);
+        
+        // Add fields one by one, using the exact names expected by the server
         formData.append('operation', files[0]);
         formData.append('name', operationName);
         formData.append('diagramId', diagramId);
+        
+        // Log all form fields before sending
+        console.log('FormData entries:');
+        for (let pair of formData.entries()) {
+          console.log(pair[0], pair[1]);
+        }
         
         const response = await createOperation(formData);
         
@@ -62,7 +73,6 @@
         console.error('Upload error details:', err);
         error = err.message || 'Error uploading operation sequence';
         if (err.response) {
-          // If we have a response object, log more details
           console.error('Server response:', err.response.status, err.response.data);
           error = err.response.data?.message || error;
         }
