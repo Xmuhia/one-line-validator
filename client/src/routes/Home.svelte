@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { navigate } from 'svelte-routing';
+    import { goto } from '$app/navigation';
     import DiagramUploader from '../components/DiagramUploader.svelte';
     import OperationUploader from '../components/OperationUploader.svelte';
     import { diagramStore } from '../stores/diagramStore';
@@ -27,13 +27,13 @@
     function handleDiagramUploaded(event) {
       const diagram = event.detail;
       diagramStore.addDiagram(diagram);
-      navigate(`/diagrams/${diagram._id}`);
+      goto(`/diagrams/${diagram._id}`);
     }
     
     function handleOperationUploaded(event) {
       const operation = event.detail;
       operationStore.addOperation(operation);
-      navigate(`/operations/${operation._id}`);
+      goto(`/operations/${operation._id}`);
     }
     
     function selectDiagramForOperation(diagramId) {
@@ -81,7 +81,7 @@
               <div class="button-group">
                 <button 
                   class="view-btn"
-                  on:click={() => navigate(`/diagrams/${diagram._id}`)}
+                  on:click={() => goto(`/diagrams/${diagram._id}`)}
                 >
                   View Diagram
                 </button>
@@ -118,7 +118,7 @@
               </div>
               <button 
                 class="view-btn"
-                on:click={() => navigate(`/operations/${operation._id}`)}
+                on:click={() => goto(`/operations/${operation._id}`)}
               >
                 View Operation
               </button>
