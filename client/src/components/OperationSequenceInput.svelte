@@ -43,7 +43,7 @@
       
       try {
         const formData = new FormData();
-        formData.append('operationFile', files[0]);
+        formData.append('operation', files[0]);
         formData.append('name', operationName);
         formData.append('diagramId', diagramId);
         
