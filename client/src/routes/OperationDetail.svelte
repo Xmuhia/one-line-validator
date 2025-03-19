@@ -4,33 +4,35 @@
     import ValidationResults from '../components/ValidationResults.svelte';
     import { operationStore } from '../stores/operationStore';
     import { diagramStore } from '../stores/diagramStore';
-    
-    // Get the operation ID from props
+  
+    // Ensure `id` is correctly received as a prop from svelte-routing
     export let id;
-    
-    // Destructure the store values
+  
     $: operation = $operationStore.currentOperation;
     $: loading = $operationStore.loading;
     $: error = $operationStore.error;
-    
     $: steps = operation?.steps || [];
     $: diagramId = operation?.diagramId || null;
     $: diagram = $diagramStore.currentDiagram;
-    
+  
     onMount(async () => {
-      // Load operation on component mount
+      console.log('OperationDetail Mounted with ID:', id); // Debugging line
+  
+      if (!id) {
+        console.error("ID is undefined");
+        return;
+      }
+  
       try {
         const loadedOperation = await operationStore.loadOperation(id);
-        
-        // Load the associated diagram
-        if (loadedOperation.diagramId) {
+        if (loadedOperation?.diagramId) {
           await diagramStore.loadDiagram(loadedOperation.diagramId);
         }
       } catch (err) {
         console.error('Error loading operation:', err);
       }
     });
-  </script>
+  </script>  
   
   <div class="operation-detail">
     <div class="back-link">
